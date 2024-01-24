@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    body {
+      background-image: url('https://th.bing.com/th/id/R.2b1a391d44fa4cff99be4670d1437d64?rik=QYkrJHeDjUtfWw&riu=http%3a%2f%2fwww.idealmagazine.co.uk%2fwp-content%2fuploads%2f2016%2f08%2fBA-dining-room-2-cantu.jpg&ehk=S8n1QfCM19iKCoiLdjq8TDxXECbWyABHSQok%2b%2fndSEE%3d&risl=&pid=ImgRaw&r=0');
+      background-size: cover;
+      font-family: 'Avalon', sans-serif;
+      color: rgb(255, 255, 255);
+    }
+
+    table {
+      text-align: center;
+      margin-left: 10%;
+      margin-right: 50%;
+      color: black; /* Set the color for table text */
+    }
+
+    input,
+    button {
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-family: 'Avalon', sans-serif;
+      color: black; /* Set the color for input and button text */
+    }
+
+    /* Added color styling for checkboxes and submit button */
+    input[type="checkbox"],
+    button {
+      background-color: #dc6007;
+      color: white;
+    }
+
+    /* Added color styling for radio buttons */
+    input[type="radio"] {
+      background-color: #008CBA;
+      color: white;
+    }
+
+    /* Added styling for the reservation bill */
+    #bill {
+      background-color: #f2f2f2;
+      padding: 10px;
+      border-radius: 8px;
+      color: #008CBA;
+    }
+  </style>
+</head>
+
+<body>
+  <div align="center">
+    <h1>Dinner Time Book Your Place!</h1>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" size="22" onblur="validateName()">
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" size="22" onblur="validatePhoneNumber()"><br>
+  </div>
+  <br>
+  <div align="margin-left">
+    <h2>Select a time</h2>
+    <input type="radio" id="first" name="seating" value="5" checked>
+    <label for="first">5:00</label><br>
+    <input type="radio" id="second" name="seating" value="6">
+    <label for="second">6:00</label><br>
+    <input type="radio" id="third" name="seating" value="7">
+    <label for="third">7:00</label><br>
+    <input type="radio" id="fourth" name="seating" value="8">
+    <label for="fourth">8:00</label><br>
+    <br>
+    <h2>What would you like to have with us?</h2>
+    <input type="checkbox" id="starters" name="preferences" value="starters">
+    <label for="starters">Starters</label><br>
+    <input type="checkbox" id="Main" name="preferences" value="main">
+    <label for="Main">Main Course</label><br>
+    <input type="checkbox" id="dessert" name="preferences" value="dessert">
+    <label for="dessert">Dessert</label><br>
+    <input type="checkbox" id="drinks" name="preferences" value="drinks">
+    <label for="drinks">Drinks</label><br>
+  </div>
+  <button onclick="submit()" id="submit" disabled>
+    Submit</button>
+  <div id="message"></div>
+  <div id="bill" style="display: none;">
+    <h2>Reservation Bill</h2>
+    <p><strong>Name:</strong> <span id="billName"></span></p>
+    <p><strong>Phone Number:</strong> <span id="billPhone"></span></p>
+    <p><strong>Time:</strong> <span id="billTime"></span></p>
+    <p><strong>Preferences:</strong> <span id="billPreferences"></span></p>
+  </div>
+
+  <script>
+    function submit() {
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const time = document.querySelector('input[name="seating"]:checked').value;
+
+      const preferences = [];
+      document.querySelectorAll('input[name="preferences"]:checked').forEach(checkbox => {
+        preferences.push(checkbox.value);
+      });
+
+      document.getElementById('billName').textContent = name;
+      document.getElementById('billPhone').textContent = phone;
+      document.getElementById('billTime').textContent = time + ':00';
+      document.getElementById('billPreferences').textContent = preferences.join(', ');
+
+      document.getElementById('bill').style.display = 'block';
+      window.alert("Submit");
+    }
+
+    function validateName() {
+      const nameInput = document.getElementById('name');
+      const name = nameInput.value.trim();
+
+      if (name === '') {
+        displayError(nameInput, 'Error: Name is empty.');
+      } else if (!isValidFullName(name)) {
+        displayError(nameInput, 'Error: First and last names are required.');
+      } else {
+        resetError(nameInput);
+      }
+    }
+
+    function isValidFullName(name) {
+      const nameParts = name.split(' ');
+      return nameParts.length >= 2;
+    }
+
+    function validatePhoneNumber() {
+      const phoneInput = document.getElementById('phone');
+      const phoneNumber = phoneInput.value.trim();
+
+      if (phoneNumber === '') {
+        displayError(phoneInput, 'Error: Phone number is empty.');
+      } else if (!isValidPhoneNumber(phoneNumber)) {
+        displayError(phoneInput, 'Error: Phone number must start with numbers.');
+      } else {
+        resetError(phoneInput);
+      }
+    }
+
+    function isValidPhoneNumber(phoneNumber) {
+      return /^\d/.test(phoneNumber);
+    }
+
+    function displayError(inputElement, errorMessage) {
+      inputElement.style.borderColor = 'red';
+      document.getElementById('message').innerHTML = errorMessage;
+      document.getElementById('submit').disabled = true;
+    }
+
+    function resetError(inputElement) {
+      inputElement.style.borderColor = '';
+      document.getElementById('message').innerHTML = '';
+      document.getElementById('submit').disabled = false;
+    }
+  </script>
+</body>
+
+</html>
